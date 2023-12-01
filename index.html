@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Anagram Game</title>
+    <title>Christmas coding themed Anagram Guessing Game</title>
     <style>
       input.correct {
         background-color: #8bc34a;
@@ -11,7 +11,7 @@
     </style>
   </head>
   <body>
-    <h2>Anagram Guessing Game</h2>
+    <h1>Christmas coding themed Anagram Guessing Game</h1>
 
     <form id="anagramForm">
       <!-- Dynamically generated input fields -->
@@ -90,19 +90,26 @@
           };
         });
 
-      console.log(anagrams);
       // Create input fields for each anagram
       const form = document.getElementById("anagramForm");
       for (let i = 0; i < combinedWords.length; i++) {
+        const container = document.createElement("div");
+
+        const anagramLabel = document.createElement("label");
+        anagramLabel.textContent = `Anagram ${i + 1}: ${anagrams[i].anagram}`;
+        container.appendChild(anagramLabel);
+
         const input = document.createElement("input");
         input.type = "text";
-        input.placeholder = `Anagram ${i + 1}`;
-        input.setAttribute("data-word", anagrams[i].word);
-        form.appendChild(document.createElement("br"));
-        form.appendChild(document.createTextNode(anagrams[i].anagram));
-        form.appendChild(document.createElement("br"));
+        input.placeholder = `Guess Anagram ${i + 1}`;
+        input.setAttribute("data-word", anagrams[i].original);
         input.addEventListener("input", checkGuess);
-        form.appendChild(input);
+
+        container.appendChild(document.createElement("br"));
+        container.appendChild(input);
+        container.appendChild(document.createElement("br"));
+        container.appendChild(document.createElement("br"));
+        form.appendChild(container);
       }
 
       function generateAnagram(word) {
