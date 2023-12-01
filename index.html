@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Anagram Game</title>
+    <style>
+      input.correct {
+        background-color: #8bc34a;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Anagram Guessing Game</h2>
+
+    <form id="anagramForm">
+      <!-- Dynamically generated input fields -->
+    </form>
+
+    <script>
+      // List of common Christmas-themed words
+      const christmasWords = [
+        "santa",
+        "tree",
+        "gift",
+        "ornament",
+        "jingle",
+        "reindeer",
+        "merry",
+        "candle",
+        "snow",
+        "celebrate",
+        "holly",
+        "sleigh",
+        "joy",
+        "mistletoe",
+        "bells",
+        "festive",
+        "stocking",
+        "wreath",
+        "cookies",
+        "carol",
+      ];
+
+      // List of common computer science-themed words
+      const computerScienceWords = [
+        "algorithm",
+        "programming",
+        "code",
+        "debugging",
+        "database",
+        "function",
+        "variable",
+        "loop",
+        "interface",
+        "software",
+        "hardware",
+        "compiler",
+        "server",
+        "network",
+        "algorithm",
+        "boolean",
+        "encryption",
+        "framework",
+        "javascript",
+        "python",
+      ];
+
+      // Combine the two lists and shuffle the order
+      const combinedWords = shuffleArray(
+        christmasWords.concat(computerScienceWords)
+      );
+
+      // Function to shuffle an array using the Fisher-Yates algorithm
+      function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+      }
+
+      // Generate anagrams for each entry in the combined list
+      const anagrams = combinedWords
+        .sort((a, b) => (b.length < a.length ? 1 : -1))
+        .map((word) => {
+          return {
+            original: word,
+            anagram: generateAnagram(word),
+          };
+        });
+
+      console.log(anagrams);
+      // Create input fields for each anagram
+      const form = document.getElementById("anagramForm");
+      for (let i = 0; i < combinedWords.length; i++) {
+        const input = document.createElement("input");
+        input.type = "text";
+        input.placeholder = `Anagram ${i + 1}`;
+        input.setAttribute("data-word", anagrams[i].word);
+        form.appendChild(document.createElement("br"));
+        form.appendChild(document.createTextNode(anagrams[i].anagram));
+        form.appendChild(document.createElement("br"));
+        input.addEventListener("input", checkGuess);
+        form.appendChild(input);
+      }
+
+      function generateAnagram(word) {
+        // Check if the input is a valid word
+        if (typeof word !== "string" || word.length === 0) {
+          return "Invalid input";
+        }
+
+        // Convert the word to an array of characters
+        const characters = word.split("");
+
+        // Randomly rearrange the characters using the Fisher-Yates shuffle algorithm
+        for (let i = characters.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [characters[i], characters[j]] = [characters[j], characters[i]];
+        }
+
+        // Join the characters back into a string to get the anagram
+        const anagram = characters.join("");
+
+        return anagram;
+      }
+
+      function checkGuess(event) {
+        const input = event.target;
+        const guessedWord = input.value.toLowerCase();
+        const originalWord = input.getAttribute("data-word");
+
+        if (guessedWord === originalWord) {
+          input.classList.add("correct");
+        } else {
+          input.classList.remove("correct");
+        }
+      }
+    </script>
+  </body>
+</html>
